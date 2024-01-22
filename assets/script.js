@@ -1,42 +1,32 @@
-// Set the date to the end of the current month
-var countDownDate = new Date(
-  new Date().getFullYear(),
-  new Date().getMonth() + 1,
-  0
-).getTime();
+const flipCard = document.querySelector('.flip-card');
 
-// Function to flip the card
-function flipCard(cardId) {
-  var card = document.getElementById(cardId);
-  card.classList.add("flipped");
-  setTimeout(function () {
-    card.classList.remove("flipped");
-  }, 500);
+
+const flip = (flipCard) => {
+  const topHalf = flipCard.querySelector(".top");
+  const bottomHalf = flipCard.querySelector(".bottom");
+  const topFlip = document.createElement("div");
+  topFlip.classList.add("top-flip");
+  const bottomFlip = document.createElement("div");
+  bottomFlip.classList.add("bottom-flip");
+  const initial = parseInt(topHalf.textContent)
+
+  topHalf.textContent = initial;
+  bottomHalf.textContent = initial;
+  topFlip.textContent = initial;
+  bottomFlip.textContent = initial - 1;
+
+  topFlip.addEventListener("animationstart", (e) => {
+    topHalf.textContent = initial - 1;
+  });
+  topFlip.addEventListener("animationend", (e) => {
+    topFlip.remove();
+  });
+  bottomFlip.addEventListener("animationend", (e) => {
+    bottomHalf.textContent = initial - 1;
+    bottomFlip.remove();
+  });
+
+  flipCard.append(topFlip, bottomFlip);
 }
 
-// Update the countdown every second
-var x = setInterval(function () {
-  // Get the current time
-  var now = new Date().getTime();
-
-  // Calculate the distance between now and the countdown date
-  var distance = countDownDate - now;
-
-  // Calculate days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  // Update the HTML elements with the new values
-  document.getElementById("days").innerHTML = days;
-  document.getElementById("hours").innerHTML = hours;
-  document.getElementById("minutes").innerHTML = minutes;
-  document.getElementById("seconds").innerHTML = seconds;
-
-  // Call flip animation for each card
-  flipCard("days");
-  flipCard("hours");
-  flipCard("minutes");
-  flipCard("seconds");
-}, 1000);
+flip(flipCard);
